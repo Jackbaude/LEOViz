@@ -135,34 +135,43 @@ def get_sinr():
     logger.info("SNR measurement saved to {}".format(FILENAME))
 
 
+# def wait_until_target_time(last_timeslot_second):
+#     while True:
+#         current_second = datetime.now(timezone.utc).second
+#         if current_second >= 12 and current_second < 27 and last_timeslot_second != 12:
+#             last_timeslot_second = 12
+#             break
+#         elif (
+#             current_second >= 27 and current_second < 42 and last_timeslot_second != 27
+#         ):
+#             last_timeslot_second = 27
+#             break
+#         elif (
+#             current_second >= 42 and current_second < 57 and last_timeslot_second != 42
+#         ):
+#             last_timeslot_second = 42
+#             break
+#         elif (
+#             current_second >= 57 and current_second < 60 and last_timeslot_second != 57
+#         ):
+#             last_timeslot_second = 57
+#             break
+#         elif current_second >= 0 and current_second < 12 and last_timeslot_second != 57:
+#             last_timeslot_second = 57
+#             break
+#         time.sleep(0.1)
+#     logger.info("Current timeslot starts at second: {}".format(last_timeslot_second))
+#     return last_timeslot_second
+
 def wait_until_target_time(last_timeslot_second):
     while True:
         current_second = datetime.now(timezone.utc).second
-        if current_second >= 12 and current_second < 27 and last_timeslot_second != 12:
-            last_timeslot_second = 12
+        if current_second != last_timeslot_second:
+            last_timeslot_second = current_second
             break
-        elif (
-            current_second >= 27 and current_second < 42 and last_timeslot_second != 27
-        ):
-            last_timeslot_second = 27
-            break
-        elif (
-            current_second >= 42 and current_second < 57 and last_timeslot_second != 42
-        ):
-            last_timeslot_second = 42
-            break
-        elif (
-            current_second >= 57 and current_second < 60 and last_timeslot_second != 57
-        ):
-            last_timeslot_second = 57
-            break
-        elif current_second >= 0 and current_second < 12 and last_timeslot_second != 57:
-            last_timeslot_second = 57
-            break
-        time.sleep(0.1)
+        time.sleep(0.05)  # check a few times per second for precision
     logger.info("Current timeslot starts at second: {}".format(last_timeslot_second))
     return last_timeslot_second
-
 
 def get_obstruction_map_frame_type():
     context = starlink_grpc.ChannelContext(target=STARLINK_GRPC_ADDR_PORT)
